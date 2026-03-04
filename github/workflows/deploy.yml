@@ -1,0 +1,60 @@
+name: Notification Service CI/CD
+
+# Runs every time you push to main
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-push-deploy:
+    name: Build → Push → Deploy
+    runs-on: self-hosted        # uses YOUR PC as the build server
+
+    steps:
+
+      # STEP 1 — Get the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # STEP 2 — Set up Java
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # STEP 3 — Build the JAR file
+      - name: Build JAR
+        run: mvn clean package -DskipTests
+
+      # STEP 4 — Log in to DockerHub
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # STEP 5 — Build Docker image
+      - name: Build Docker Image
+        run: docker build -t rayhan1994/notification:latest .
+
+      # STEP 6 — Push image to DockerHub
+      - name: Push to DockerHub
+        run: docker push rayhan1994/notification:latest
+
+      # STEP 7 — Deploy to Minikube
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl apply -f k8s/namespace.yml
+          kubectl apply -f k8s/mysql-deployment.yml
+          kubectl apply -f k8s/kafka-deployment.yml
+          kubectl apply -f k8s/prometheus-deployment.yml
+          kubectl apply -f k8s/grafana-deployment.yml
+          kubectl apply -f k8s/notification-deployment.yml
+          kubectl rollout restart deployment/notification -n ecommerce
+          kubectl rollout status deployment/notification -n ecommerce
+
+      # STEP 8 — Confirm
+      - name: Verify Deployment
+        run: kubectl get pods -n ecommerce

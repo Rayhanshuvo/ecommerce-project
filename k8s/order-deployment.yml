@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order
+  namespace: ecommerce
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order
+  template:
+    metadata:
+      labels:
+        app: order
+    spec:
+      containers:
+        - name: order
+          image: rayhan1994/order:latest
+          imagePullPolicy: Always
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mysql://mysql-container:3306/order_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+            - name: SPRING_DATASOURCE_USERNAME
+              value: app
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: app123
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              value: kafka:9092
+          ports:
+            - containerPort: 8083
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order
+  namespace: ecommerce
+spec:
+  selector:
+    app: order
+  type: NodePort
+  ports:
+    - port: 8083
+      nodePort: 30083
