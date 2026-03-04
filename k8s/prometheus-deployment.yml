@@ -55,7 +55,7 @@ metadata:
 spec:
   selector:
     app: prometheus
-  type: NodePort
+  type: LoadBalancer
   ports:
     - port: 9090
       nodePort: 30090

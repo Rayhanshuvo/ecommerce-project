@@ -34,7 +34,7 @@ metadata:
 spec:
   selector:
     app: kafka-ui
-  type: NodePort
+  type: LoadBalancer
   ports:
     - port: 8080
       nodePort: 30089

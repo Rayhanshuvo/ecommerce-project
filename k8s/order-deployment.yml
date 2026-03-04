@@ -37,7 +37,7 @@ metadata:
 spec:
   selector:
     app: order
-  type: NodePort
+  type: LoadBalancer
   ports:
     - port: 8083
       nodePort: 30083
