@@ -1,3 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: kafka-data-pvc
+  namespace: ecommerce
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -13,42 +25,109 @@ spec:
       labels:
         app: kafka
     spec:
+      securityContext:
+        fsGroup: 1000
+
+      initContainers:
+        # DEV MODE: wipe old/corrupt data (prevents EOF corrupt record loop)
+        - name: wipe-kafka-data
+          image: busybox:1.36
+          command: ["sh","-c","rm -rf /var/lib/kafka/data/* || true; chown -R 1000:1000 /var/lib/kafka/data || true"]
+          volumeMounts:
+            - name: kafka-data
+              mountPath: /var/lib/kafka/data
+
       containers:
         - name: kafka
-          image: apache/kafka:latest
+          image: apache/kafka:3.8.1
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - name: broker
+              containerPort: 9092
+            - name: controller
+              containerPort: 9093
+
           env:
             - name: KAFKA_NODE_ID
               value: "1"
+
             - name: KAFKA_PROCESS_ROLES
               value: "broker,controller"
+
             - name: KAFKA_LISTENERS
               value: "PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093"
+
             - name: KAFKA_ADVERTISED_LISTENERS
               value: "PLAINTEXT://kafka:9092"
+
             - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
               value: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT"
-            - name: KAFKA_CONTROLLER_QUORUM_VOTERS
-              value: "1@kafka:9093"
+
             - name: KAFKA_CONTROLLER_LISTENER_NAMES
               value: "CONTROLLER"
+
             - name: KAFKA_INTER_BROKER_LISTENER_NAME
               value: "PLAINTEXT"
+
+            # single-node: controller talks to itself locally
+            - name: KAFKA_CONTROLLER_QUORUM_VOTERS
+              value: "1@localhost:9093"
+
+            - name: KAFKA_LOG_DIRS
+              value: "/var/lib/kafka/data"
+
             - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
               value: "1"
-            - name: KAFKA_CLUSTER_ID
-              value: "5L6g3nShT-eMCtK--X86sw"
+            - name: KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR
+              value: "1"
+            - name: KAFKA_TRANSACTION_STATE_LOG_MIN_ISR
+              value: "1"
+            - name: KAFKA_MIN_INSYNC_REPLICAS
+              value: "1"
+
             - name: KAFKA_AUTO_CREATE_TOPICS_ENABLE
               value: "true"
             - name: KAFKA_NUM_PARTITIONS
               value: "1"
-          ports:
-            - containerPort: 9092
+
+            # After wiping, a fixed cluster id is fine, but not required.
+            # Keeping it stable is ok; wipe will regenerate metadata anyway.
+            - name: CLUSTER_ID
+              value: "5L6g3nShT-eMCtK--X86sw"
+
           volumeMounts:
-            - name: kafka-data          # ← ADD THIS
+            - name: kafka-data
               mountPath: /var/lib/kafka/data
+
+          readinessProbe:
+            tcpSocket:
+              port: 9092
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 6
+
+          livenessProbe:
+            tcpSocket:
+              port: 9092
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            timeoutSeconds: 2
+            failureThreshold: 6
+
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "1"
+              memory: "1Gi"
+
       volumes:
-        - name: kafka-data              # ← ADD THIS
-          emptyDir: {}
+        - name: kafka-data
+          persistentVolumeClaim:
+            claimName: kafka-data-pvc
 ---
 apiVersion: v1
 kind: Service
@@ -59,4 +138,7 @@ spec:
   selector:
     app: kafka
   ports:
-    - port: 9092
+    - name: broker
+      port: 9092
+      targetPort: 9092
+  type: ClusterIP
