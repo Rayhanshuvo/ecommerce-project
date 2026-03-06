@@ -72,25 +72,24 @@
     <orderEntry type="library" name="Maven: jakarta.validation:jakarta.validation-api:3.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.logging:jboss-logging:3.6.2.Final" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml:classmate:1.7.3" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-webmvc:4.0.3" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-web:4.0.3" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-jackson:4.0.3" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-jackson:4.0.3" level="project" />
     <orderEntry type="library" name="Maven: tools.jackson.core:jackson-databind:3.0.4" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.20" level="project" />
     <orderEntry type="library" name="Maven: tools.jackson.core:jackson-core:3.0.4" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-tomcat:4.0.3" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-tomcat-runtime:4.0.3" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.tomcat.embed:tomcat-embed-core:11.0.18" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.tomcat.embed:tomcat-embed-websocket:11.0.18" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-tomcat:4.0.3" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-http-converter:4.0.3" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-web:7.0.5" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-webmvc:4.0.3" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-servlet:4.0.3" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-webmvc:7.0.5" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-expression:7.0.5" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Maven: com.mysql:mysql-connector-j:9.6.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework.boot:spring-boot-starter-tomcat:4.0.3" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework.boot:spring-boot-starter-tomcat-runtime:4.0.3" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework.boot:spring-boot-web-server:4.0.3" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.tomcat.embed:tomcat-embed-core:11.0.18" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.tomcat.embed:tomcat-embed-websocket:11.0.18" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework.boot:spring-boot-tomcat:4.0.3" level="project" />
+    <orderEntry type="library" name="Maven: com.mysql:mysql-connector-j:8.0.33" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-starter-actuator-test:4.0.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-starter-test:4.0.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-test:4.0.3" level="project" />
@@ -153,7 +152,9 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-starter-validation-test:4.0.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-starter-webmvc-test:4.0.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-starter-jackson-test:4.0.3" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-starter-webmvc:4.0.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-webmvc-test:4.0.3" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-web-server:4.0.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-resttestclient:4.0.3" level="project" />
   </component>
 </module>

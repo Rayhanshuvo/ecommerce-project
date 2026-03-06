@@ -92,5 +92,23 @@ resource "kubernetes_ingress_v1" "ecommerce" {
         }
       }
     }
+
+    rule {
+      host = "gateway.local"
+      http {
+        path {
+          path      = "/"
+          path_type = "Prefix"
+          backend {
+            service {
+              name = kubernetes_service.gateway.metadata[0].name
+              port {
+                number = 8085
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
