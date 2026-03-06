@@ -25,7 +25,7 @@ public class OrderController {
     }
 
     @GetMapping("/test2")
-    public String getMethodName(@RequestParam String param) {
+    public String getMethodName() {
         return "Welcome to the new world";
     }
   
