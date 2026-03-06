@@ -38,3 +38,6 @@ mvnw
 mvnw.cmd
 *.log
 
+.idea/
+api-gateway/target/
+notification/target/
