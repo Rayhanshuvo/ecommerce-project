@@ -6,6 +6,9 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/api/orders")
@@ -20,4 +23,10 @@ public class OrderController {
         kafkaTemplate.send("order-topic", message);
         return ResponseEntity.ok("Message sent: " + message);
     }
+
+    @GetMapping("/test2")
+    public String getMethodName(@RequestParam String param) {
+        return "Welcome to the new world";
+    }
+  
 }
